@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../Axios.js';
 import RowPoster from '../RowPoster/RowPoster';
+import { Api_key } from '../../Constants/Constants.js';
 
 const genreMap = {
   Action: 28,
@@ -16,10 +17,17 @@ const FilmRows = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       const newData = {};
+
+      try {
+        const trendingRes = await axios.get(`/trending/movie/week?api_key=${Api_key}`);
+        newData['Trending'] = trendingRes.data;
+      } catch (err) {
+        console.error('Error fetching trending movies:', err);
+      }
+
       for (const [genreName, genreId] of Object.entries(genreMap)) {
         try {
-          const res = await axios.get(
-            `https://api.themoviedb.org/3/discover/movie?api_key=6b2680c92e9bb6a181c6d74d863bbe77&with_genres=${genreId}`
+          const res = await axios.get(`/discover/movie?api_key=${Api_key}&with_genres=${genreId}`
           );
           newData[genreName] = res.data;
         } catch (err) {
@@ -35,7 +43,7 @@ const FilmRows = () => {
   return (
     <div>
       {Object.entries(moviesByGenre).map(([genre, data]) => (
-        <RowPoster key={genre} title={genre} data={data} />
+        <RowPoster key={genre} title={genre} data={data} isSmall={ genre!=='Trending'?true:false} />
       ))}
     </div>
   );
