@@ -30,7 +30,9 @@ const Wishlist = () => {
   return (
   <>
     <Navbar />
+     <h3 className='title'>My List</h3>
     <div className="wishlist-container">
+       
       {movies.map((movie) => (
         <WishlistCard key={movie.id} movie={movie} />
       ))}
