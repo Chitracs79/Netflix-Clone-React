@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useAuth } from "../../Context/UseAuth";
 import './Navbar.css'
 import logo from '../../assets/logo.png'
 import search_icon from '../../assets/search_icon.svg'
@@ -10,7 +11,10 @@ import {Link} from 'react-router-dom'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
-
+  const {logout} = useAuth();
+  const handleSignout = ()=>{
+    logout();
+  }
   return (
     <div className='navbar'>
       <div className='navbar-left'>
@@ -36,7 +40,7 @@ const Navbar = () => {
         <div className='navbar-profile'>
           <img src={profile_img} alt="Profile" className='profile' />
           <img src={caret_icon} alt="caret" />
-          <div className="dropdown">
+          <div className="dropdown" onClick={handleSignout}>
             <p>Sign Out of Netflix</p>
           </div>
         </div>
